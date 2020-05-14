@@ -42,10 +42,10 @@ pipeline {
         always {
             script {
                 sh 'echo =====================archiveArtifacts====================='
-                archiveArtifacts 'target/*.jar'
+                archiveArtifacts 'build/libs/*.jar'
 
                 sh 'echo =====================JUnit====================='
-                junit 'target/surefire-reports/*.xml'
+                junit 'build/test-results/test/TEST-com.sample.test.TestService.xml'
 
                 if ("$runOnly" == '' || "$runOnly" == 'cloudBeesFlowAssociateBuildToRelease') {
                     sh 'echo  =====================cloudBeesFlowAssociateBuildToRelease====================='
