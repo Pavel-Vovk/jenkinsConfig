@@ -1,8 +1,9 @@
 package projects.pipelines
 /*
 parameters
+buildParameters         -> Parameters for build gradlew                             -> default: ''
 runOnly                 ->  Name of Run PBA, if '' - all PBAs                       -> default: ''
-artifactPath            ->  Path to artifact on Jenkins side                        -> default: 'target/helloworld-1.0-SNAPSHOT.jar'
+artifactPath            ->  Path to artifact on Jenkins side                        -> default: 'build/libs/gradle-test-build-4.9.jar'
 
 flowConfigName          ->  CloudBees Flow configuration name on Jenkins side       -> default: 'electricflow'
 flowProjectName         ->  CloudBees Flow Project Name                             -> default: 'pvNativeJenkinsProject01'
@@ -26,8 +27,14 @@ pipeline {
         stage('Build') {
             steps {
                 cleanWs()
-                git 'https://github.com/Pavel-Vovk/forrester_demo_2020.git'
-                sh '/usr/share/maven/bin/mvn install'
+                sh 'echo "=================== Run on jenkins side ===================="'
+                sh 'echo `pwd`'
+                sh 'echo `whoami`'
+                sh 'echo `uname -a`'
+                sh 'echo `hostname`'
+                sh 'echo "=================== Git and Build ===================="'
+                git 'https://github.com/electric-cloud-community/gradle-test-build.git'
+                sh "./gradlew build $buildParameters"
             }
         }
     }
