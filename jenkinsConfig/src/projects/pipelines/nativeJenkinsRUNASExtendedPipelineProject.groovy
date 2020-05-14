@@ -1,68 +1,88 @@
 package projects.pipelines
-
-pipeline{
+/*
+parameters
+runOnly                 ->  Name of Run PBA, if '' - all PBAs
+artifactPath            ->  Path to artifact on Jenkins side
+cred                    ->  user Credential Id
+flowConfigName          ->  CloudBees Flow configuration name on Jenkins side
+flowProjectName         ->  CloudBees Flow Project Name
+flowReleaseName         ->  CloudBees Flow Release Name
+flowApplication         ->  CloudBees Flow Application Name
+flowApplicationProcess  ->  CloudBees Flow Application Process Name
+flowEnvironmentName     ->  CloudBees Flow Environment Name
+flowArtifactoryKP       ->  CloudBees Flow Artifact Group:Name
+flowRepositoryName      ->  CloudBees Flow target repository
+flowPipelineName        ->  CloudBees Flow Pipeline Name
+flowProcedureName       ->  CloudBees Flow Procedure Name
+flowHTTPBody            ->  CloudBees Flow HTTP Body for API request
+flowEnvVarNameForResult ->  CloudBees Flow Variable name for saving the results
+flowHTTPMethod          ->  CloudBees Flow HTTP method for API request
+flowAPIURL              ->  CloudBees Flow HTTP Url for API request
+*/
+pipeline {
     agent any
     stages {
-        stage('first step') {
+        stage('Build') {
             steps {
+                cleanWs()
                 sh 'echo "=================== Run on jenkins side ===================="'
                 sh 'echo `pwd`'
                 sh 'echo `whoami`'
                 sh 'echo `uname -a`'
                 sh 'echo `hostname`'
                 sh 'echo "=================== Post Build Actions ===================="'
-                sh 'echo "====== cloudBeesFlowDeployApplication ======"'
-                sh 'echo "------ cloudBeesFlowDeployApplication ------"'
-                cloudBeesFlowDeployApplication applicationName: 'pvNativeJenkinsTestApplication01', applicationProcessName: 'pvDeployProcess', configuration: 'electricflow', deployParameters: '{"runProcess":{"applicationName":"pvNativeJenkinsTestApplication01","applicationProcessName":"pvDeployProcess","parameter":[]}}', environmentName: 'pvEnvironment', overrideCredential: [credentialId: "$cred"], projectName: 'pvNativeJenkinsProject01'
-
-
-                sh 'echo "====== cloudBeesFlowRunPipeline ======"'
-                sh 'echo "------ cloudBeesFlowRunPipeline ------ user1 ------"'
-                //new
-                cloudBeesFlowRunPipeline addParam: '{"pipeline":{"pipelineName":"pvNativeJenkinsTestPipeline01","parameters":[{"parameterName":"testParam1","parameterValue":""},{"parameterName":"TestParam2","parameterValue":""}]}}', configuration: 'electricflow', overrideCredential: [credentialId: '1'], pipelineName: 'pvNativeJenkinsTestPipeline01', projectName: 'pvNativeJenkinsProject01'
-                //old
-                cloudBeesFlowRunPipeline addParam: '{"pipeline":{"pipelineName":"pvNativeJenkinsTestPipeline01","parameters":[]}}', configuration: 'electricflow', overrideCredential: [credentialId: '1'], pipelineName: 'pvNativeJenkinsTestPipeline01', projectName: 'pvNativeJenkinsProject01'
-                cloudBeesFlowRunPipeline addParam: '{"pipeline":{"pipelineName":"pvNativeJenkinsTestPipeline02","parameters":[]}}', configuration: 'electricflow', overrideCredential: [credentialId: '1'], pipelineName: 'pvNativeJenkinsTestPipeline02', projectName: 'pvNativeJenkinsProject01'
-
-                sh 'echo "------ cloudBeesFlowRunPipeline ------ user2 ------"'
-                cloudBeesFlowRunPipeline addParam: '{"pipeline":{"pipelineName":"pvNativeJenkinsTestPipeline01","parameters":[]}}', configuration: 'electricflow', overrideCredential: [credentialId: '2'], pipelineName: 'pvNativeJenkinsTestPipeline01', projectName: 'pvNativeJenkinsProject02'
-                cloudBeesFlowRunPipeline addParam: '{"pipeline":{"pipelineName":"pvNativeJenkinsTestPipeline02","parameters":[]}}', configuration: 'electricflow', overrideCredential: [credentialId: '2'], pipelineName: 'pvNativeJenkinsTestPipeline02', projectName: 'pvNativeJenkinsProject02'
-
-                sh 'echo "------ cloudBeesFlowRunPipeline ------ admin ------"'
-                cloudBeesFlowRunPipeline addParam: '{"pipeline":{"pipelineName":"pvNativeJenkinsTestPipeline01","parameters":[]}}', configuration: 'electricflow', overrideCredential: [credentialId: '4'], pipelineName: 'pvNativeJenkinsTestPipeline01', projectName: 'pvNativeJenkinsProject01'
-                cloudBeesFlowRunPipeline addParam: '{"pipeline":{"pipelineName":"pvNativeJenkinsTestPipeline02","parameters":[]}}', configuration: 'electricflow', overrideCredential: [credentialId: '4'], pipelineName: 'pvNativeJenkinsTestPipeline02', projectName: 'pvNativeJenkinsProject01'
-                cloudBeesFlowRunPipeline addParam: '{"pipeline":{"pipelineName":"pvNativeJenkinsTestPipeline01","parameters":[]}}', configuration: 'electricflow', overrideCredential: [credentialId: '4'], pipelineName: 'pvNativeJenkinsTestPipeline01', projectName: 'pvNativeJenkinsProject02'                //cloudBeesFlowRunPipeline addParam: '{"pipeline":{"pipelineName":"pvNativeJenkinsTestPipeline02","parameters":[]}}', configuration: 'electricflow', overrideCredential: [credentialId: '4'], pipelineName: 'pvNativeJenkinsTestPipeline02', projectName: 'pvNativeJenkinsProject02'
-
-
-                sh 'echo "====== cloudBeesFlowRunProcedure ======"'
-                sh 'echo "------ cloudBeesFlowRunProcedure ------ user1 ------"'
-                cloudBeesFlowRunProcedure configuration: 'electricflow', overrideCredential: [credentialId: '1'], procedureName: 'nativeJenkinsTestProcedure', procedureParameters: '{"procedure":{"procedureName":"nativeJenkinsTestProcedure","parameters":[]}}', projectName: 'pvNativeJenkinsProject01'
-
-
-                sh 'echo "------ cloudBeesFlowRunProcedure ------ user2 ------"'
-                cloudBeesFlowRunProcedure configuration: 'electricflow', overrideCredential: [credentialId: '2'], procedureName: 'nativeJenkinsTestProcedure', procedureParameters: '{"procedure":{"procedureName":"nativeJenkinsTestProcedure","parameters":[]}}', projectName: 'pvNativeJenkinsProject02'
-
-                sh 'echo "------ cloudBeesFlowRunProcedure ------ admin ------"'
-                cloudBeesFlowRunProcedure configuration: 'electricflow', overrideCredential: [credentialId: '4'], procedureName: 'nativeJenkinsTestProcedure', procedureParameters: '{"procedure":{"procedureName":"nativeJenkinsTestProcedure","parameters":[]}}', projectName: 'pvNativeJenkinsProject01'
-                cloudBeesFlowRunProcedure configuration: 'electricflow', overrideCredential: [credentialId: '4'], procedureName: 'nativeJenkinsTestProcedure', procedureParameters: '{"procedure":{"procedureName":"nativeJenkinsTestProcedure","parameters":[]}}', projectName: 'pvNativeJenkinsProject02'
-
-                sh 'echo "------ cloudBeesFlowRunProcedure ------ Parameter CRED ------"'
-                //cloudBeesFlowRunProcedure configuration: 'electricflow', overrideCredential: [credentialId: 'CRED'], procedureName: 'nativeJenkinsTestProcedure', procedureParameters: '{"procedure":{"procedureName":"nativeJenkinsTestProcedure","parameters":[]}}', projectName: 'pvNativeJenkinsProject02'
-                sh 'echo "====== cloudBeesFlowCallRestApi ======"'
-                sh 'echo "------ cloudBeesFlowCallRestApi ------ user1 ------"'
-                cloudBeesFlowCallRestApi body: '', configuration: 'electricflow', envVarNameForResult: '', httpMethod: 'GET', overrideCredential: [credentialId: "$CRED"], urlPath: '/projects'
-
-                sh 'echo "------ cloudBeesFlowCallRestApi ------ user2 ------"'
-                cloudBeesFlowCallRestApi body: '', configuration: 'electricflow', envVarNameForResult: '', httpMethod: 'GET', overrideCredential: [credentialId: '2'], urlPath: '/projects'
-
-                sh 'echo "------ cloudBeesFlowCallRestApi ------ slave ------"'
-                cloudBeesFlowCallRestApi body: '', configuration: 'electricflow', envVarNameForResult: '', httpMethod: 'GET', overrideCredential: [credentialId: '3'], urlPath: '/projects'
-
-                sh 'echo "------ cloudBeesFlowCallRestApi ------ admin ------"'
-                cloudBeesFlowCallRestApi body: '', configuration: 'electricflow', envVarNameForResult: '', httpMethod: 'GET', overrideCredential: [credentialId: '4'], urlPath: '/projects'
-
-                //sh 'echo "=================== End run on jenkins side ==================="'
             }
         }
     }
+    post {
+        always {
+            script {
+                sh 'echo =====================archiveArtifacts====================='
+                archiveArtifacts 'target/*.jar'
+
+                sh 'echo =====================JUnit====================='
+                junit 'target/surefire-reports/*.xml'
+
+                if ("$runOnly" == '' || "$runOnly" == 'cloudBeesFlowAssociateBuildToRelease') {
+                    sh 'echo  =====================cloudBeesFlowAssociateBuildToRelease====================='
+                    cloudBeesFlowAssociateBuildToRelease configuration: "$flowConfigName", overrideCredential: [credentialId: "$cred"], projectName: "$flowProjectName", releaseName: "$flowReleaseName"
+                }
+
+                if ("$runOnly" == '' || "$runOnly" == 'cloudBeesFlowCreateAndDeployAppFromJenkinsPackage') {
+                    sh 'echo  =====================cloudBeesFlowCreateAndDeployAppFromJenkinsPackage====================='
+                    cloudBeesFlowCreateAndDeployAppFromJenkinsPackage configuration: "$flowConfigName", filePath: "$artifactPath", overrideCredential: [credentialId: "$cred"]
+                }
+
+                if ("$runOnly" == '' || "$runOnly" == 'cloudBeesFlowDeployApplication') {
+                    sh 'echo  =====================cloudBeesFlowDeployApplication====================='
+                    cloudBeesFlowDeployApplication applicationName: "$flowApplication", applicationProcessName: "$flowApplicationProcess", configuration: "$flowConfigName", deployParameters: '{"runProcess":{"applicationName":"$flowApplication","applicationProcessName":"$flowApplicationProcess","parameter":[{"actualParameterName":"deployTestAppParam1","value":""},{"actualParameterName":"deployTestAppParam2","value":""}]}}', environmentName: "$flowEnvironmentName", overrideCredential: [credentialId: "$cred"], projectName: "$flowProjectName"
+                }
+
+                if ("$runOnly" == '' || "$runOnly" == 'cloudBeesFlowPublishArtifact') {
+                    sh 'echo  =====================cloudBeesFlowPublishArtifact====================='
+                    cloudBeesFlowPublishArtifact artifactName: "$flowArtifactoryKP", artifactVersion: "$BUILD_NUMBER", configuration: "$flowConfigName", filePath: "$artifactPath", overrideCredential: [credentialId: "$cred"], repositoryName: "$flowRepositoryName"
+                }
+
+                if ("$runOnly" == '' || "$runOnly" == 'cloudBeesFlowRunPipeline') {
+                    sh 'echo  =====================cloudBeesFlowRunPipeline====================='
+                    cloudBeesFlowRunPipeline addParam: '{"pipeline":{"pipelineName":"$flowPipelineName","parameters":[{"parameterName":"testParam1","parameterValue":""},{"parameterName":"TestParam2","parameterValue":""}]}}', configuration: "$flowConfigName", overrideCredential: [credentialId: "$cred"], pipelineName: "$flowPipelineName", projectName: "$flowProjectName"
+                }
+
+                if ("$runOnly" == '' || "$runOnly" == 'cloudBeesFlowRunProcedure') {
+                    sh 'echo  =====================cloudBeesFlowRunProcedure====================='
+                    cloudBeesFlowRunProcedure configuration: "$flowConfigName", overrideCredential: [credentialId: "$cred"], procedureName: "$flowProcedureName", procedureParameters: '{"procedure":{"procedureName":"$flowProcedureName","parameters":[{"actualParameterName":"testParam1","value":""},{"actualParameterName":"testParam2","value":""}]}}', projectName: "$flowProjectName"
+                }
+
+                if ("$runOnly" == '' || "$runOnly" == 'cloudBeesFlowTriggerRelease') {
+                    sh 'echo  =====================cloudBeesFlowTriggerRelease====================='
+                    cloudBeesFlowTriggerRelease configuration: "$flowConfigName", overrideCredential: [credentialId: "$cred"], parameters: '{"release":{"releaseName":"pvRelease","stages":[{"stageName":"Stage 1","stageValue":""},{"stageName":"Stage 1 Copy 1","stageValue":""}],"pipelineName":"pipeline_pvRelease","parameters":[{"parameterName":"releaseTestParam1","parameterValue":""},{"parameterName":"releaseTestParam2","parameterValue":""}]}}', projectName: 'pvNativeJenkinsProject02', releaseName: "$flowReleaseName", startingStage: 'Stage 1 Copy 1'
+                }
+                if ("$runOnly" == '' || "$runOnly" == 'cloudBeesFlowCallRestApi') {
+                    sh 'echo  =====================cloudBeesFlowCallRestApi====================='
+                    cloudBeesFlowCallRestApi body: "$flowHTTPBody", configuration: "$flowConfigName", envVarNameForResult: "$flowEnvVarNameForResult", httpMethod: "$flowHTTPMethod", overrideCredential: [credentialId: "$cred"], urlPath: "$flowAPIURL"
+                }
+            }
+        }
+    }
+
 }
