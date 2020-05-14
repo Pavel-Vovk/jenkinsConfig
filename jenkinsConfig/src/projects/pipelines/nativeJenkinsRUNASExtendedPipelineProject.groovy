@@ -1,23 +1,24 @@
 package projects.pipelines
 /*
 parameters
-runOnly                 ->  Name of Run PBA, if '' - all PBAs
-artifactPath            ->  Path to artifact on Jenkins side
-cred                    ->  user Credential Id
-flowConfigName          ->  CloudBees Flow configuration name on Jenkins side
-flowProjectName         ->  CloudBees Flow Project Name
-flowReleaseName         ->  CloudBees Flow Release Name
-flowApplication         ->  CloudBees Flow Application Name
-flowApplicationProcess  ->  CloudBees Flow Application Process Name
-flowEnvironmentName     ->  CloudBees Flow Environment Name
-flowArtifactoryKP       ->  CloudBees Flow Artifact Group:Name
-flowRepositoryName      ->  CloudBees Flow target repository
-flowPipelineName        ->  CloudBees Flow Pipeline Name
-flowProcedureName       ->  CloudBees Flow Procedure Name
-flowHTTPBody            ->  CloudBees Flow HTTP Body for API request
-flowEnvVarNameForResult ->  CloudBees Flow Variable name for saving the results
-flowHTTPMethod          ->  CloudBees Flow HTTP method for API request
-flowAPIURL              ->  CloudBees Flow HTTP Url for API request
+runOnly                 ->  Name of Run PBA, if '' - all PBAs -> default: ''
+artifactPath            ->  Path to artifact on Jenkins side -> default: 'target/helloworld-1.0-SNAPSHOT.jar'
+cred                    ->  user Credential Id -> default: ''
+
+flowConfigName          ->  CloudBees Flow configuration name on Jenkins side -> default: 'electricflow'
+flowProjectName         ->  CloudBees Flow Project Name -> default: 'pvNativeJenkinsProject01'
+flowReleaseName         ->  CloudBees Flow Release Name -> default: 'pvRelease'
+flowApplication         ->  CloudBees Flow Application Name -> default: 'pvNativeJenkinsTestApplication01'
+flowApplicationProcess  ->  CloudBees Flow Application Process Name -> default: 'pvDeployProcess'
+flowEnvironmentName     ->  CloudBees Flow Environment Name -> default: 'pvEnvironment'
+flowArtifactoryKP       ->  CloudBees Flow Artifact Group:Name -> default: 'pv:PBATests'
+flowRepositoryName      ->  CloudBees Flow target repository -> default: 'default'
+flowPipelineName        ->  CloudBees Flow Pipeline Name -> default: 'pvNativeJenkinsTestPipeline01'
+flowProcedureName       ->  CloudBees Flow Procedure Name -> default: 'nativeJenkinsTestProcedure'
+flowHTTPBody            ->  CloudBees Flow HTTP Body for API request -> default: ''
+flowEnvVarNameForResult ->  CloudBees Flow Variable name for saving the results -> default: ''
+flowHTTPMethod          ->  CloudBees Flow HTTP method for API request -> default: 'GET'
+flowAPIURL              ->  CloudBees Flow HTTP Url for API request -> default: '/projects'
 */
 pipeline {
     agent any
