@@ -1,9 +1,10 @@
 package projects.pipelines
 /*
 parameters
+buildParameters         -> Parameters for build gradlew                             -> default: ''
 runOnly                 ->  Name of Run PBA, if '' - all PBAs                       -> default: ''
-artifactPath            ->  Path to artifact on Jenkins side                        -> default: 'target/helloworld-1.0-SNAPSHOT.jar'
-cred                    ->  user Credential Id                                      -> default: '4' admin
+artifactPath            ->  Path to artifact on Jenkins side                        -> default: 'target/helloworld-1.0-SNAPSHOT.jar' TODO
+cred                    ->  user Credential Id                                      -> default: '4' (user1 - 1, user2 - 2, slave - 3, admin - 4)
 
 flowConfigName          ->  CloudBees Flow configuration name on Jenkins side       -> default: 'electricflow'
 flowProjectName         ->  CloudBees Flow Project Name                             -> default: 'pvNativeJenkinsProject01'
@@ -11,7 +12,7 @@ flowReleaseName         ->  CloudBees Flow Release Name                         
 flowApplication         ->  CloudBees Flow Application Name                         -> default: 'pvNativeJenkinsTestApplication01'
 flowApplicationProcess  ->  CloudBees Flow Application Process Name                 -> default: 'pvDeployProcess'
 flowEnvironmentName     ->  CloudBees Flow Environment Name                         -> default: 'pvEnvironment'
-flowArtifactoryKP       ->  CloudBees Flow Artifact Group:Name                      -> default: 'pv:PBATests'
+flowArtifactoryKP       ->  CloudBees Flow Artifact Group:Name                      -> default: 'pv:RUNASTests'
 flowRepositoryName      ->  CloudBees Flow target repository                        -> default: 'default'
 flowPipelineName        ->  CloudBees Flow Pipeline Name                            -> default: 'pvNativeJenkinsTestPipeline01'
 flowProcedureName       ->  CloudBees Flow Procedure Name                           -> default: 'nativeJenkinsTestProcedure'
@@ -31,13 +32,16 @@ pipeline {
                 sh 'echo `whoami`'
                 sh 'echo `uname -a`'
                 sh 'echo `hostname`'
-                sh 'echo "=================== Post Build Actions ===================="'
+                sh 'echo "=================== Git and Build ===================="'
+                git 'https://github.com/electric-cloud-community/gradle-test-build.git'
+                sh './gradlew build "$buildParameters"'
             }
         }
     }
     post {
         always {
             script {
+                sh 'echo "=================== Post Build Actions ===================="'
                 sh 'echo =====================archiveArtifacts====================='
                 archiveArtifacts 'target/*.jar'
 
