@@ -1,4 +1,24 @@
 package projects.pipelines
+/*
+parameters
+runOnly                 ->  Name of Run PBA, if '' - all PBAs
+artifactPath            ->  Path to artifact on Jenkins side
+
+flowConfigName          ->  CloudBees Flow configuration name on Jenkins side
+flowProjectName         ->  CloudBees Flow Project Name
+flowReleaseName         ->  CloudBees Flow Release Name
+flowApplication         ->  CloudBees Flow Application Name
+flowApplicationProcess  ->  CloudBees Flow Application Process Name
+flowEnvironmentName     ->  CloudBees Flow Environment Name
+flowArtifactoryKP       ->  CloudBees Flow Artifact Group:Name
+flowRepositoryName      ->  CloudBees Flow target repository
+flowPipelineName        ->  CloudBees Flow Pipeline Name
+flowProcedureName       ->  CloudBees Flow Procedure Name
+flowHTTPBody            ->  CloudBees Flow HTTP Body for API request
+flowEnvVarNameForResult ->  CloudBees Flow Variable name for saving the results
+flowHTTPMethod          ->  CloudBees Flow HTTP method for API request
+flowAPIURL              ->  CloudBees Flow HTTP Url for API request
+ */
 
 pipeline {
     agent any
