@@ -3,7 +3,7 @@ package projects.pipelines
 parameters
 buildParameters         -> Parameters for build gradlew                             -> default: ''
 runOnly                 ->  Name of Run PBA, if '' - all PBAs                       -> default: ''
-artifactPath            ->  Path to artifact on Jenkins side                        -> default: 'target/helloworld-1.0-SNAPSHOT.jar' TODO
+artifactPath            ->  Path to artifact on Jenkins side                        -> default: 'build/libs/gradle-test-build-4.9.jar'
 cred                    ->  user Credential Id                                      -> default: '4' (user1 - 1, user2 - 2, slave - 3, admin - 4)
 
 flowConfigName          ->  CloudBees Flow configuration name on Jenkins side       -> default: 'electricflow'
@@ -43,10 +43,10 @@ pipeline {
             script {
                 sh 'echo "=================== Post Build Actions ===================="'
                 sh 'echo =====================archiveArtifacts====================='
-                archiveArtifacts 'target/*.jar'
+                archiveArtifacts 'build/libs/*.jar'
 
                 sh 'echo =====================JUnit====================='
-                junit 'target/surefire-reports/*.xml'
+                junit 'build/test-results/test/TEST-com.sample.test.TestService.xml'
 
                 if ("$runOnly" == '' || "$runOnly" == 'cloudBeesFlowAssociateBuildToRelease') {
                     sh 'echo  =====================cloudBeesFlowAssociateBuildToRelease====================='
