@@ -34,7 +34,7 @@ pipeline {
                 sh 'echo `hostname`'
                 sh 'echo "=================== Git and Build ===================="'
                 git 'https://github.com/electric-cloud-community/gradle-test-build.git'
-                sh "./gradlew build $buildParameters"
+                sh "./gradlew clean build $buildParameters"
             }
         }
     }
