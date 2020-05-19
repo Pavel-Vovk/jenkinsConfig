@@ -1,7 +1,7 @@
 package projects.pipelines
 /*
 parameters
-buildParameters         -> Parameters for build gradlew                             -> default: ''
+buildParameters         -> Parameters for build gradlew                             -> default: 'clean build'
 runOnly                 ->  Name of Run PBA, if '' - all PBAs                       -> default: ''
 artifactPath            ->  Path to artifact on Jenkins side                        -> default: 'build/libs/gradle-test-build-4.9.jar'
 
@@ -35,7 +35,7 @@ pipeline {
                 sh 'echo `hostname`'
                 sh 'echo "=================== Git and Build ===================="'
                 git 'https://github.com/electric-cloud-community/gradle-test-build.git'
-                sh "./gradlew clean build $buildParameters"
+                sh "./gradlew $buildParameters"
             }
         }
     }
