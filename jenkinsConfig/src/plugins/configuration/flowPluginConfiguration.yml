@@ -24,4 +24,10 @@ echo 'unclassified:
         electricFlowPassword: "$[flowPassword]"
         electricFlowUrl: "https://$[flowExternalIp]"
         electricFlowUser: "incorrectUser"
-        ignoreSslConnectionErrors: true' > electricflow-configuration.yaml
+        ignoreSslConnectionErrors: true
+      - configurationName: "sslNOIgnoreError"
+        electricFlowApiVersion: "/rest/v1.0"
+        electricFlowPassword: "$[flowPassword]"
+        electricFlowUrl: "https://$[flowExternalIp]"
+        electricFlowUser: "$[flowUser]"
+        ignoreSslConnectionErrors: false' > electricflow-configuration.yaml
