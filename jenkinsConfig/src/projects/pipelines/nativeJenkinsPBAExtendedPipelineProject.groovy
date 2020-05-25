@@ -5,22 +5,23 @@ buildParameters         -> Parameters for build gradlew                         
 runOnly                 ->  Name of Run PBA, if '' - all PBAs                       -> default: ''
 artifactPath            ->  Path to artifact on Jenkins side                        -> default: 'build/libs/gradle-test-build-4.9.jar'
 
-flowConfigName          ->  CloudBees Flow configuration name on Jenkins side       -> default: 'electricflow'
-flowProjectName         ->  CloudBees Flow Project Name                             -> default: 'pvNativeJenkinsProject01'
-flowReleaseName         ->  CloudBees Flow Release Name                             -> default: 'pvRelease'
-flowApplication         ->  CloudBees Flow Application Name                         -> default: 'pvNativeJenkinsTestApplication01'
-flowApplicationProcess  ->  CloudBees Flow Application Process Name                 -> default: 'pvDeployProcess'
-flowEnvironmentName     ->  CloudBees Flow Environment Name                         -> default: 'pvEnvironment'
-flowArtifactoryKP       ->  CloudBees Flow Artifact Group:Name                      -> default: 'pv:PBATests'
-flowRepositoryName      ->  CloudBees Flow target repository                        -> default: 'default'
-flowPipelineName        ->  CloudBees Flow Pipeline Name                            -> default: 'pvNativeJenkinsTestPipeline01'
-flowProcedureName       ->  CloudBees Flow Procedure Name                           -> default: 'nativeJenkinsTestProcedure'
-flowHTTPBody            ->  CloudBees Flow HTTP Body for API request                -> default: ''
-flowEnvVarNameForResult ->  CloudBees Flow Variable name for saving the results     -> default: ''
-flowHTTPMethod          ->  CloudBees Flow HTTP method for API request              -> default: 'GET'
-flowAPIURL              ->  CloudBees Flow HTTP Url for API request                 -> default: '/projects'
- */
-
+flowConfigName          ->  CloudBees CD configuration name on Jenkins side         -> default: 'electricflow'
+flowProjectName         ->  CloudBees CD Project Name                               -> default: 'pvNativeJenkinsProject01'
+flowReleaseName         ->  CloudBees CD Release Name                               -> default: 'pvRelease'
+flowApplication         ->  CloudBees CD Application Name                           -> default: 'pvNativeJenkinsTestApplication01'
+flowApplicationProcess  ->  CloudBees CD Application Process Name                   -> default: 'pvDeployProcess'
+flowEnvironmentName     ->  CloudBees CD Environment Name                           -> default: 'pvEnvironment'
+flowArtifactoryKP       ->  CloudBees CD Artifact Group:Name                        -> default: 'pv:PBATests'
+flowRepositoryName      ->  CloudBees CD target repository                          -> default: 'default'
+flowPipelineName        ->  CloudBees CD Pipeline Name                              -> default: 'pvNativeJenkinsTestPipeline01'
+flowProcedureName       ->  CloudBees CD Procedure Name                             -> default: 'nativeJenkinsTestProcedure'
+flowStartingStage       ->  CloudBees CD Release Pipeline Stage                     -> default: 'Stage 1' (pvNativeJenkinsProject01 -> pvRelease -> 'Stage 1'; pvNativeJenkinsProject02 -> pvRelease -> 'Stage 1' or 'Stage 1 Copy 1')
+flowHTTPBody            ->  CloudBees CD HTTP Body for API request                  -> default: ''
+flowEnvVarNameForResult ->  CloudBees CD Variable name for saving the results       -> default: ''
+flowHTTPMethod          ->  CloudBees CD HTTP method for API request                -> default: 'GET'
+flowAPIURL              ->  CloudBees CD HTTP Url for API request                   -> default: '/projects'
+*/
+def jsonForReleaseParameters
 
 pipeline {
     agent any
@@ -42,6 +43,7 @@ pipeline {
     post {
         always {
             script {
+                sh 'echo "=================== Post Build Actions ===================="'
                 sh 'echo =====================archiveArtifacts====================='
                 archiveArtifacts 'build/libs/*.jar'
 
@@ -74,13 +76,23 @@ pipeline {
                 }
 
                 if ("$runOnly" == '' || "$runOnly" =~ 'TriggerRelease') {
+                    sh 'echo  =====================TriggerRelease prepare JSON====================='
+                    if ("$flowProjectName" == 'pvNativeJenkinsProject01') {
+                        jsonForReleaseParameters = '{"release":{"releaseName":"pvRelease","stages":[{"stageName":"Stage 1","stageValue":""}],"pipelineName":"pipeline_pvRelease","parameters":[]}}'
+                    }
+                    if ("$flowProjectName" == 'pvNativeJenkinsProject02') {
+                        jsonForReleaseParameters = '{"release":{"releaseName":"pvRelease","stages":[{"stageName":"Stage 1","stageValue":""},{"stageName":"Stage 1 Copy 1","stageValue":""}],"pipelineName":"pipeline_pvRelease","parameters":[{"parameterName":"releaseTestParam1","parameterValue":"releaseTestParam1Value"},{"parameterName":"releaseTestParam2","parameterValue":"releaseTestParam2Value"}]}}'
+                    }
+                    sh "echo Prepared JSON: $jsonForReleaseParameters"
                     sh 'echo  =====================cloudBeesFlowTriggerRelease====================='
-                    cloudBeesFlowTriggerRelease configuration: "$flowConfigName", parameters: '{"release":{"releaseName":"pvRelease","stages":[{"stageName":"Stage 1","stageValue":""},{"stageName":"Stage 1 Copy 1","stageValue":""}],"pipelineName":"pipeline_pvRelease","parameters":[{"parameterName":"releaseTestParam1","parameterValue":""},{"parameterName":"releaseTestParam2","parameterValue":""}]}}', projectName: 'pvNativeJenkinsProject02', releaseName: "$flowReleaseName", startingStage: 'Stage 1 Copy 1'
+                    cloudBeesFlowTriggerRelease configuration: "$flowConfigName", parameters: jsonForReleaseParameters, projectName: "$flowProjectName", releaseName: "$flowReleaseName", startingStage: "$flowStartingStage"
                 }
+
                 if ("$runOnly" == '' || "$runOnly" =~ 'CallRestApi') {
                     sh 'echo  =====================cloudBeesFlowCallRestApi====================='
                     cloudBeesFlowCallRestApi body: "$flowHTTPBody", configuration: "$flowConfigName", envVarNameForResult: "$flowEnvVarNameForResult", httpMethod: "$flowHTTPMethod", urlPath: "$flowAPIURL"
                 }
+
                 if ("$runOnly" == '' || "$runOnly" =~ 'AssociateBuildToRelease') {
                     sh 'echo  =====================cloudBeesFlowAssociateBuildToRelease====================='
                     cloudBeesFlowAssociateBuildToRelease configuration: "$flowConfigName", projectName: "$flowProjectName", releaseName: "$flowReleaseName"

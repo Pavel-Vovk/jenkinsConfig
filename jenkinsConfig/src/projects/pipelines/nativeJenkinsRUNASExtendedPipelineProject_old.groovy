@@ -70,6 +70,13 @@ pipeline{
                 cloudBeesFlowCallRestApi body: '', configuration: 'electricflow', envVarNameForResult: '', httpMethod: 'GET', overrideCredential: [credentialId: '4'], urlPath: '/projects'
 
                 //sh 'echo "=================== End run on jenkins side ==================="'
+
+
+                //need to refactor
+                if ("$runOnly" == '' || "$runOnly" =~ 'TriggerRelease') {
+                    sh 'echo  =====================cloudBeesFlowTriggerRelease====================='
+                    cloudBeesFlowTriggerRelease configuration: "$flowConfigName", parameters: '{"release":{"releaseName":"pvRelease","stages":[{"stageName":"Stage 1","stageValue":""},{"stageName":"Stage 1 Copy 1","stageValue":""}],"pipelineName":"pipeline_pvRelease","parameters":[{"parameterName":"releaseTestParam1","parameterValue":""},{"parameterName":"releaseTestParam2","parameterValue":""}]}}', projectName: 'pvNativeJenkinsProject02', releaseName: "$flowReleaseName", startingStage: 'Stage 1 Copy 1'
+                }
             }
         }
     }
