@@ -1,0 +1,27 @@
+echo 'unclassified:
+  electricflow:
+    configurations:
+      - configurationName: "electricflow"
+        electricFlowApiVersion: "/rest/v1.0"
+        electricFlowPassword: "$[flowPassword]"
+        electricFlowUrl: "https://$[flowExternalIp]"
+        electricFlowUser: "$[flowUser]"
+        ignoreSslConnectionErrors: true
+      - configurationName: "incorrectURL"
+        electricFlowApiVersion: "/rest/v1.0"
+        electricFlowPassword: "$[flowPassword]"
+        electricFlowUrl: "https://incorrect/url"
+        electricFlowUser: "$[flowUser]"
+        ignoreSslConnectionErrors: true
+      - configurationName: "incorrectPassword"
+        electricFlowApiVersion: "/rest/v1.0"
+        electricFlowPassword: "incorrectPassword"
+        electricFlowUrl: "https://$[flowExternalIp]"
+        electricFlowUser: "$[flowUser]"
+        ignoreSslConnectionErrors: true
+      - configurationName: "incorrectUser"
+        electricFlowApiVersion: "/rest/v1.0"
+        electricFlowPassword: "$[flowPassword]"
+        electricFlowUrl: "https://$[flowExternalIp]"
+        electricFlowUser: "incorrectUser"
+        ignoreSslConnectionErrors: true' > electricflow-configuration.yaml
