@@ -85,7 +85,7 @@ pipeline {
                     }
                     sh "echo Prepared JSON: $jsonForReleaseParameters"
                     sh 'echo  =====================cloudBeesFlowTriggerRelease====================='
-                    cloudBeesFlowTriggerRelease configuration: "$flowConfigName", overrideCredential: [credentialId: "$cred"], jsonForReleaseParameters, projectName: 'pvNativeJenkinsProject02', releaseName: "$flowReleaseName", startingStage: 'Stage 1 Copy 1'
+                    cloudBeesFlowTriggerRelease configuration: "$flowConfigName", overrideCredential: [credentialId: "$cred"], parameters: jsonForReleaseParameters, projectName: "$flowProjectName", releaseName: "$flowReleaseName", startingStage: "$flowStartingStage"
                 }
 
                 if ("$runOnly" == '' || "$runOnly" =~ 'CallRestApi') {
