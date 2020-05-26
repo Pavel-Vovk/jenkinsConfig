@@ -5,7 +5,7 @@ import com.cloudbees.plugins.credentials.impl.*
 import hudson.util.Secret
 import jenkins.model.Jenkins
 
-//define all creds
+//define credentials as map and save it to list.
 def credentials = []
 def jenkinsKeyUsernameWithPasswordParameters
 
@@ -42,7 +42,6 @@ jenkinsKeyUsernameWithPasswordParameters = [
 credentials.add(jenkinsKeyUsernameWithPasswordParameters)
 
 // parameters
-
 
 // get Jenkins instance
 Jenkins jenkins = Jenkins.getInstance()
