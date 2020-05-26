@@ -7,14 +7,7 @@ import jenkins.model.Jenkins
 
 //define all creds
 def credentials = []
-
-def jenkinsKeyUsernameWithPasswordParameters = [
-        description: 'Flow Admin User',
-        id         : '4',
-        secret     : 'changeme',
-        userName   : 'admin'
-]
-credentials.add(jenkinsKeyUsernameWithPasswordParameters)
+def jenkinsKeyUsernameWithPasswordParameters
 
 jenkinsKeyUsernameWithPasswordParameters = [
         description: 'Flow user1. User has access to pvNativeJenkinsProject01, Default, EC-Utilities',
@@ -37,6 +30,14 @@ jenkinsKeyUsernameWithPasswordParameters = [
         id         : '3',
         secret     : 'changeme',
         userName   : 'slave'
+]
+credentials.add(jenkinsKeyUsernameWithPasswordParameters)
+
+jenkinsKeyUsernameWithPasswordParameters = [
+        description: 'Flow Admin User',
+        id         : '4',
+        secret     : 'changeme',
+        userName   : 'admin'
 ]
 credentials.add(jenkinsKeyUsernameWithPasswordParameters)
 
