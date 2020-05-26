@@ -33,7 +33,7 @@ credentials.add(jenkinsKeyUsernameWithPasswordParameters)
 
 jenkinsKeyUsernameWithPasswordParameters = [
         description:  'Flow slave User',
-        id:           '2',
+        id:           '3',
         secret:       'changeme',
         userName:     'slave'
 ]
@@ -62,7 +62,7 @@ for (credential in credentials){
     )
 
 // add credential to store
-   store.addCredentials(domain, credential)
+   store.addCredentials(domain, jenkinsKeyUsernameWithPassword)
 }
 
 // save to disk
