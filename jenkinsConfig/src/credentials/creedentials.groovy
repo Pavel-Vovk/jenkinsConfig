@@ -16,7 +16,7 @@ def credentials = []
 credentials.add(jenkinsKeyUsernameWithPasswordParameters)
 
 jenkinsKeyUsernameWithPasswordParameters = [
-        description:  'Flow user1 User',
+        description:  'Flow user1. User has access to pvNativeJenkinsProject01, Default, EC-Utilities',
         id:           '1',
         secret:       'changeme',
         userName:     'user1'
@@ -24,7 +24,7 @@ jenkinsKeyUsernameWithPasswordParameters = [
 credentials.add(jenkinsKeyUsernameWithPasswordParameters)
 
 jenkinsKeyUsernameWithPasswordParameters = [
-        description:  'Flow user2 User',
+        description:  'Flow user2. User has access to pvNativeJenkinsProject02, Default, EC-Utilities',
         id:           '2',
         secret:       'changeme',
         userName:     'user2'
@@ -32,7 +32,7 @@ jenkinsKeyUsernameWithPasswordParameters = [
 credentials.add(jenkinsKeyUsernameWithPasswordParameters)
 
 jenkinsKeyUsernameWithPasswordParameters = [
-        description:  'Flow slave User',
+        description:  'Flow slave. User has access to Default, EC-Utilities',
         id:           '3',
         secret:       'changeme',
         userName:     'slave'
