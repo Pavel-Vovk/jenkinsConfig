@@ -16,6 +16,7 @@ flowRepositoryName      ->  CloudBees CD target repository                      
 flowPipelineName        ->  CloudBees CD Pipeline Name                              -> default: 'pvNativeJenkinsTestPipeline01'
 flowProcedureName       ->  CloudBees CD Procedure Name                             -> default: 'nativeJenkinsTestProcedure'
 flowStartingStage       ->  CloudBees CD Release Pipeline Stage                     -> default: 'Stage 1' (pvNativeJenkinsProject01 -> pvRelease -> 'Stage 1'; pvNativeJenkinsProject02 -> pvRelease -> 'Stage 1' or 'Stage 1 Copy 1')
+flowRuntimeId           ->  CloudBees CD Pipeline Run FlowRuntimeId                 -> default: ''
 flowHTTPBody            ->  CloudBees CD HTTP Body for API request                  -> default: ''
 flowEnvVarNameForResult ->  CloudBees CD Variable name for saving the results       -> default: ''
 flowHTTPMethod          ->  CloudBees CD HTTP method for API request                -> default: 'GET'
@@ -95,7 +96,7 @@ pipeline {
 
                 if ("$runOnly" == '' || "$runOnly" =~ 'AssociateBuildToRelease') {
                     sh 'echo  =====================cloudBeesFlowAssociateBuildToRelease====================='
-                    cloudBeesFlowAssociateBuildToRelease configuration: "$flowConfigName", projectName: "$flowProjectName", releaseName: "$flowReleaseName"
+                    cloudBeesFlowAssociateBuildToRelease configuration: "$flowConfigName", projectName: "$flowProjectName", releaseName: "$flowReleaseName", flowRuntimeid: "$flowRuntimeId"
                 }
             }
         }
